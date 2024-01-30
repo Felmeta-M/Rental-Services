@@ -37,9 +37,9 @@ dependencies:
   solid_bottom_sheet: ^0.1.10
   sqflite: ^2.0.0+4
   # image_picker: ^0.8.4
-  image_picker: ^1.0.0
+  image_picker: ^1.0.7
   loader_overlay: ^2.0.2+1
-  dio: ^4.0.0
+  dio: ^5.4.0
   loader_skeleton: ^0.0.4
   floor: ^1.1.0
   equatable: ^2.0.3

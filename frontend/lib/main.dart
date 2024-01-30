@@ -164,7 +164,7 @@ class _HomeState extends State<Home> {
           items: data,
           color: Colors.white,
           buttonBackgroundColor: Colors.white,
-          backgroundColor: Colors.pinkAccent,
+          backgroundColor: Colors.green,
           animationCurve: Curves.easeInOut,
           animationDuration: Duration(milliseconds: 600),
           onTap: (index) {

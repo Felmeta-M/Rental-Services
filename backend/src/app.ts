@@ -27,7 +27,7 @@ mongoose
     }
   )
   .then(() => console.log('Connected to DB...'))
-  .catch((err) => console.error('Could not connect to DB...'));
+  .catch((err) => console.error('Could not connect to DB...', err));
 
 app.use(express.json());
 app.use('/api/v1/users', Routes.userRoute);

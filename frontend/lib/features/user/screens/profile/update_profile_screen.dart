@@ -12,12 +12,7 @@ import 'package:rental/core/presentation/txt_field.dart';
 import 'package:rental/core/validators/InputFormValidators.dart';
 import 'package:rental/features/user/bloc/profile_bloc/profile_bloc.dart';
 
-class UpdateProfile extends StatelessWidget with InputValidationMixin {
-  final _formKey = GlobalKey<FormState>();
-
-  String? newProfilePath;
-  final ImagePicker _picker = ImagePicker();
-
+class UpdateProfile extends StatefulWidget with InputValidationMixin {
   late User user;
 
   late final nameTextController;
@@ -31,6 +26,17 @@ class UpdateProfile extends StatelessWidget with InputValidationMixin {
     phoneTextController =
         new TextEditingController(text: user.phoneNumber ?? "");
   }
+
+  @override
+  State<UpdateProfile> createState() => _UpdateProfileState();
+}
+
+class _UpdateProfileState extends State<UpdateProfile> {
+  final _formKey = GlobalKey<FormState>();
+
+  String? newProfilePath;
+
+  final ImagePicker _picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
@@ -64,10 +70,11 @@ class UpdateProfile extends StatelessWidget with InputValidationMixin {
                   }
 
                   if (state is ProfileUpdateSuccesful) {
-                    user = state.user;
-                    this.nameTextController.text = user.name;
-                    this.emailTextController.text = user.email;
-                    this.phoneTextController.text = user.phoneNumber ?? "";
+                    widget.user = state.user;
+                    this.widget.nameTextController.text = widget.user.name;
+                    this.widget.emailTextController.text = widget.user.email;
+                    this.widget.phoneTextController.text =
+                        widget.user.phoneNumber ?? "";
 
                     final lunchBar = LunchBars(
                         lunchBarText: "Profile Updated succesfully",
@@ -77,7 +84,7 @@ class UpdateProfile extends StatelessWidget with InputValidationMixin {
                 },
                 builder: (_, state) {
                   if (state is ProfileLoaded) {
-                    user = state.user;
+                    widget.user = state.user;
 
                     return Form(
                       key: _formKey,
@@ -105,7 +112,7 @@ class UpdateProfile extends StatelessWidget with InputValidationMixin {
                                         // print(user.profileImage);
                                         return NetworkProfile(
                                             profileURL: getImageUrl(
-                                                user.profileImage!));
+                                                widget.user.profileImage!));
                                       }),
                                   Align(
                                     alignment: Alignment.center,
@@ -123,11 +130,12 @@ class UpdateProfile extends StatelessWidget with InputValidationMixin {
                                           // var updatedUser = state.user.copyWith(
                                           //     profileImage: image.path);
                                           profileBloc.add(ProfilePictureChange(
-                                              user: user,
+                                              user: widget.user,
                                               changedProfilePath: image.path));
-                                          // setState(() {
-                                          //   newProfilePath = image.path;
-                                          // });
+
+                                          setState(() {
+                                            newProfilePath = image.path;
+                                          });
                                         }
                                       },
                                     ),
@@ -139,9 +147,9 @@ class UpdateProfile extends StatelessWidget with InputValidationMixin {
                           TxtField(
                             label: "Name",
                             // initialValue: user.name,
-                            controller: nameTextController,
+                            controller: widget.nameTextController,
                             validator: (name) {
-                              if (this.isTextValid(name!)) {
+                              if (widget.isTextValid(name!)) {
                                 return null;
                               }
                               return "Name can't be empty";
@@ -150,9 +158,9 @@ class UpdateProfile extends StatelessWidget with InputValidationMixin {
                           TxtField(
                             label: "Email",
                             // initialValue: user.email,
-                            controller: this.emailTextController,
+                            controller: this.widget.emailTextController,
                             validator: (email) {
-                              if (this.isEmailValid(email!)) {
+                              if (widget.isEmailValid(email!)) {
                                 return null;
                               }
                               return "Invalid email address";
@@ -161,9 +169,9 @@ class UpdateProfile extends StatelessWidget with InputValidationMixin {
                           TxtField(
                             label: "Phone",
                             // initialValue: user.phoneNumber,
-                            controller: this.phoneTextController,
+                            controller: this.widget.phoneTextController,
                             validator: (phoneNumber) {
-                              if (this.isPhoneNumberValid(phoneNumber)) {
+                              if (widget.isPhoneNumberValid(phoneNumber)) {
                                 return null;
                               }
                               return "Invalid phone format";
@@ -179,12 +187,19 @@ class UpdateProfile extends StatelessWidget with InputValidationMixin {
                                   if (_formKey.currentState!.validate()) {
                                     // print("valid");
                                     profileBloc.add(ProfileUpdate(
-                                        user: user.copyWith(
-                                            name: this.nameTextController.text,
-                                            email:
-                                                this.emailTextController.text,
-                                            phoneNumber:
-                                                this.phoneTextController.text),
+                                        user: widget.user.copyWith(
+                                            name: this
+                                                .widget
+                                                .nameTextController
+                                                .text,
+                                            email: this
+                                                .widget
+                                                .emailTextController
+                                                .text,
+                                            phoneNumber: this
+                                                .widget
+                                                .phoneTextController
+                                                .text),
                                         changedProfilePath: newProfilePath));
                                   }
                                 },

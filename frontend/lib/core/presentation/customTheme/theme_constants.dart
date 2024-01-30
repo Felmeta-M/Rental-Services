@@ -68,7 +68,7 @@ class DarkThemeConstants extends CustomThemeConstants {
 
 class CustomColors {
   // light theme colors
-  static const Color primaryColor = Color(0xFFFF8099);
+  static const Color primaryColor = Color.fromARGB(255, 15, 149, 71);
   static const Color primaryTextColor = Colors.white;
   static const Color white = Colors.white;
   static const Color purple = Colors.purple;

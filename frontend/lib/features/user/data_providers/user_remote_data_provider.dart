@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
+// import 'package:http/http.dart' as http;
 import 'package:http/http.dart' as http;
 import 'package:rental/core/exceptions/auth_exception.dart';
 import 'package:rental/core/models/user.dart';
@@ -147,25 +148,46 @@ class UserRemoteDataProvider {
     try {
       print("fetching start..");
       String filename = path.split('/').last;
-      FormData formData = FormData.fromMap({
-        "image": await MultipartFile.fromFile(
-          path,
-          filename: filename,
-        ),
+      // FormData formData = FormData.fromMap({
+      //   "image": await  MultipartFile.fromFile(
+      //     path,
+      //     filename: filename,
+      //   ),
+      // });
+
+      // var response = await Dio().put(
+      //   '${AppConstants.baseUrl}/users/profile',
+      //   data: formData,
+      //   options: Options(
+      //     headers: {
+      //       "accept": "/",
+      //       // For latter use commented
+      //       "Authorization": "Bearer ${AppConstants.token}",
+      //       "Content-Type": "multipart/form-data"
+      //     },
+      //   ),
+      // );
+
+      var request = http.MultipartRequest(
+        'PUT',
+        Uri.parse('${AppConstants.baseUrl}/users/profile'),
+      );
+
+      // Attach the file
+      request.files.add(await http.MultipartFile.fromPath(
+        'image',
+        path,
+        filename: filename,
+      ));
+
+      // Attach headers
+      request.headers.addAll({
+        "accept": "*/*",
+        "Authorization": "Bearer ${AppConstants.token}",
       });
 
-      var response = await Dio().put(
-        '${AppConstants.baseUrl}/users/profile',
-        data: formData,
-        options: Options(
-          headers: {
-            "accept": "/",
-            // For latter use commented
-            "Authorization": "Bearer ${AppConstants.token}",
-            "Content-Type": "multipart/form-data"
-          },
-        ),
-      );
+      var response = await request.send();
+
       if (response.statusCode == 201) {
         print("done");
         // return response;

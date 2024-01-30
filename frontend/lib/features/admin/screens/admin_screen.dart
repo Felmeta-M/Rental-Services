@@ -27,7 +27,7 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   Widget build(BuildContext context) {
-    final adminCubit = BlocProvider.of<AdminCubit>(context)..fetchPosts();
+    final adminCubit = BlocProvider.of<AdminCubit>(context);
     final scafold = ScaffoldMessenger.of(context);
 
     return SafeArea(
@@ -55,6 +55,8 @@ class _AdminPageState extends State<AdminPage> {
         backgroundColor: Colors.grey[50],
         body: BlocConsumer<AdminCubit, AdminState>(
           listener: (context, state) async {
+            // print("-------------------");
+            // print(state);
             state.maybeMap(
               postFetchFailure: (error) {
                 showSnakBar(context, "Error: ${error.errorMessage}", scafold);
@@ -63,7 +65,7 @@ class _AdminPageState extends State<AdminPage> {
                 showSnakBar(context, err.errorMessage, scafold);
               },
               orElse: () {
-                // showSnakBar(context, "Unknown error", scafold);
+                //   // showSnakBar(context, "Unknown error", scafold);
               },
             );
           },
@@ -89,6 +91,10 @@ class _AdminPageState extends State<AdminPage> {
                 return Center(child: CircularProgressIndicator());
               },
               orElse: () {
+                adminCubit.fetchPosts();
+
+                // print("yyyyyyyyyyyyyyyyyyyy");
+                // print(state);
                 return Center(child: Text("Unkown Error"));
               },
             );
@@ -254,7 +260,8 @@ ThemeData _buildShrineTheme() {
     buttonTheme: const ButtonThemeData(
       colorScheme: _shrineColorScheme,
       textTheme: ButtonTextTheme.normal,
-    ), colorScheme: _shrineColorScheme.copyWith(error: shrineErrorRed),
+    ),
+    colorScheme: _shrineColorScheme.copyWith(error: shrineErrorRed),
     // primaryIconTheme: _customIconTheme(base.iconTheme),
     // textTheme: _buildShrineTextTheme(base.textTheme),
     // primaryTextTheme: _buildShrineTextTheme(base.primaryTextTheme),

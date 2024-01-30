@@ -25,29 +25,28 @@ class AdminRepository {
       return left(AdminFaiulre.unAuthorized());
     }
 
-    // final propertiesResult =
-    //     await _adminRemoteDataProvider.fetchPosts(authToken: authToken);
+    final propertiesResult = await _adminRemoteDataProvider.fetchPosts();
 
-    //if netwotk error fetch from cache
+    // if netwotk error fetch from cache
     // if (propertiesResult.isLeft()) {
     //   final error = propertiesResult.getOrElse(() => []);
     //   if (error is NetworkFailedError) {
-    //     return await fetchCachedProperties();
+    //     return await fetchCachedProperties(authToken);
     //   }
     // }
 
-    final res = await fetchCachedProperties(authToken);
-    if (res == null) {
-      return left(AdminFaiulre.invalidValue());
-    } else if (res.isRight()) {
-      List<Property> properties = res.getOrElse(() => []);
-      if (properties.length > 0) {
-        await _adminLocalDataProvider.clearCachedProperties();
-        await _adminLocalDataProvider.cacheProperties(properties: properties);
-      }
-    }
+    // final res = await fetchCachedProperties(authToken);
+    // if (res == null) {
+    //   return left(AdminFaiulre.invalidValue());
+    // } else if (res.isRight()) {
+    //   List<Property> properties = res.getOrElse(() => []);
+    //   if (properties.length > 0) {
+    //     await _adminLocalDataProvider.clearCachedProperties();
+    //     await _adminLocalDataProvider.cacheProperties(properties: properties);
+    //   }
+    // }
 
-    return res;
+    return propertiesResult;
   }
 
   Future<Either<AdminFaiulre, Unit>> approveProperty(String id) async {

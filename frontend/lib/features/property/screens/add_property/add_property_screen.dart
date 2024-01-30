@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -340,6 +341,8 @@ class _AddPropertyState extends State<AddProperty> with InputValidationMixin {
                               child: GestureDetector(
                                 onTap: () async {
                                   images = await _picker.pickMultiImage();
+                                  // XFile image = images![0];
+                                  // image.
                                   if (images != null) {
                                     propertyAddBloc.add(PropertyAddImages(
                                       properyEventValue:
